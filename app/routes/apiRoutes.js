@@ -46,9 +46,9 @@ module.exports = function(app) {
 
     app.post("/api/clear", function() {
         // Empty out the arrays of data
-        tableData = [];
-        waitListData = [];
+        friends = [];
 
-        console.log(tableData);
+
+        console.log(friends);
     });
 };
