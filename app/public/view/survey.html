@@ -20,7 +20,7 @@
         <div class="jumbotron">
             <h1 class="text-center"><span class="glyphicon glyphicon-heart"></span> Friend Finder</h1>
             <hr>
-            <h2 class="text-center">Survey Questions</h2>
+            <h2 class="text-center" id="find-friend">Survey Questions</h2>
             <br>
 
         </div>
@@ -82,23 +82,23 @@
             "You think that everyone’s views should be respected regardless of whether they are supported by facts or not.",
             "You feel more energetic after spending time with a group of people."
         ]
-        var scores = []
         for (var i = 1; i < questions.length + 1; i++) {
             var number = $('<h3><strong>Question ' + i + '</strong></h3>')
             var quest = $('<h4>' + questions[i - 1] + '</h4>')
             var options = $(`<select class="chosen-select` + i + `">
-                                    <option selected>Select an option</option>
-                                    <option value="1">One (Strongly Disagree)</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                    <option value="4">Four</option>
-                                    <option value="5">Five (Strongly Agree)</option>
-                                </select>
-            `)
+                <option selected>Select an option</option>
+                <option value="1">One (Strongly Disagree)</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+                <option value="4">Four</option>
+                <option value="5">Five (Strongly Agree)</option>
+                </select>
+                `)
             $('#question').append(number, quest, options)
         }
         $(".submit").on("click", function(event) {
             event.preventDefault();
+            var scores = []
             for (var i = 1; i < questions.length + 1; i++) {
                 scores.push($(`.chosen-select` + i + ` option:selected`).val())
             }
@@ -115,22 +115,38 @@
                 console.log(data.length)
                 var diffArr = []
                 for (var i = 0; i < data.length - 1; i++) {
-                    var diff = 0
-                    console.log(diffCal(diff, newUser.scores, data[i].scores))
+
+                    console.log(newUser.scores, data[i].scores)
+                    diffArr.push(calDiff(newUser.scores, data[i].scores))
                 }
+                var minIndex = diffArr.indexOf(minDiff(diffArr))
+                $('#find-friend').text('We found a friend for you')
+                $('#find-friend').append('<p>' + data[minIndex].Name + '</p>')
+                $('#find-friend').append('<img src=' + data[minIndex].photo + ' alt="friend-photo" width="100" height="140"><br><br>')
 
             })
         })
 
-        function diffCal(d, score_1, score_2) {
+        function minDiff(Arr) {
+            var min = Arr[0]
+            for (var i = 0; i < Arr.length; i++) {
 
-            for (var j = 0; j < 10; i++) {
-                d += Math.abs(parseInt(score_1[j]) - parseInt(score_2[j]))
+                if (min >= Arr[i]) {
+                    min = Arr[i]
+                }
             }
-            return d
+            return min
+        }
+
+        function calDiff(score_1, score_2) {
+            var diff = 0
+            for (var j = 0; j < 10; j++) {
+                diff += Math.abs(parseInt(score_1[j]) - parseInt(score_2[j]))
+            }
+            return diff
         }
     </script>
-    <script src="../js/app.js" type="text/javascript"></script>
+    <!-- <script src="../js/app.js" type="text/javascript"></script> -->
 </body>
 
 </html>
